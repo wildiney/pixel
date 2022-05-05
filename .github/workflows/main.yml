@@ -1,0 +1,26 @@
+name: Deploy Pixel
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  web-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get the latest code
+      uses: actions/checkout@v3
+      
+    - name: Executing remote ssh commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{secret.HOST}}
+        username: ${{secret.USERNAME}}
+        password: ${{secret.PASSWORD}}
+        port: ${{secrets.PORT}}
+        script: |
+          cd /home/slicedpixel/domains/pixel.slicedpixel.com/
+          git pull origin main
+          git status
+          pm2 restart pixel --watch
