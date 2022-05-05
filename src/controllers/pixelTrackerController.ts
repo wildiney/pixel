@@ -1,6 +1,7 @@
-import fs from 'fs'
-import path from 'path'
+// import fs from 'fs'
+// import path from 'path'
 import { Request, Response } from 'express'
+import db from '../services/database'
 
 const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAApJREFUeNpjYQAAAAoABUouQOkAAAAASUVORK5CYII=', 'base64')
 
@@ -27,6 +28,14 @@ export const pixelTracker = (req: Request, res: Response) => {
   const data = `${now},${id},${email},${ip},"${userAgent}",${host},${referer},"${acceptLanguage}"\r`
   console.log(data)
 
-  fs.writeFile(path.join(__dirname, '../', 'reports', `${id}.csv`), data, { flag: 'a' }, (err) => console.log(err))
+  try {
+    db.serialize(() => {
+      db.run(`INSERT INTO pixelTracker VALUES ('${id}', '${now}', '${id}', '${email}', '${ip}', '${userAgent}', '${host}', '${referer}', '${acceptLanguage}')`)
+    })
+    console.log('Register added')
+  } catch (err) {
+    console.log(err)
+    // fs.writeFile(path.join(__dirname, '../', 'reports', `${id}.csv`), data, { flag: 'a' }, (err) => console.log(err))
+  }
   return send(res, 200, 'OK', { 'Content-Type': 'image/png' }, pixel)
 }
