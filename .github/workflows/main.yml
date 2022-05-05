@@ -19,6 +19,7 @@ jobs:
         username: ${{secrets.USERNAME}}
         password: ${{secrets.PASSWORD}}
         port: ${{secrets.PORT}}
+        key: ${{ secrets.DEPLOYKEY }}
         script: |
           cd /home/slicedpixel/domains/pixel.slicedpixel.com/
           git pull origin main
