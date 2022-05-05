@@ -1,4 +1,4 @@
-# PIXEL
+# PIXEL TRACKING
 
 ## HOW TO USE
 
