@@ -1,4 +1,7 @@
+import dotenv from 'dotenv'
+
 import Airtable from 'airtable'
+dotenv.config()
 
 const AIRTABLE_API_BASE: string = process.env.AIRTABLE_API_BASE!
 const AIRTABLE_API_KEY: string = process.env.AIRTABLE_API_KEY!
