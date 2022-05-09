@@ -23,8 +23,6 @@ export const pixelTracker = (req: Request, res: Response) => {
   const referer = req.headers.referer
   const host = req.headers.host
   const acceptLanguage = req.headers['accept-language']
-  const data = `${now},${idCampaign},${email},${ip},"${userAgent}",${host},${referer},"${acceptLanguage}"\r`
-  console.log(data)
 
   try {
     CreateRecord(idCampaign as string, now, email as string, ip, userAgent as string, host as string, referer as string, acceptLanguage as string)
