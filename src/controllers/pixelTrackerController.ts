@@ -1,7 +1,5 @@
-// import fs from 'fs'
-// import path from 'path'
 import { Request, Response } from 'express'
-import db from '../services/database'
+import { CreateRecord } from '../services/airtable'
 
 const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAApJREFUeNpjYQAAAAoABUouQOkAAAAASUVORK5CYII=', 'base64')
 
@@ -18,24 +16,21 @@ export const pixelTracker = (req: Request, res: Response) => {
   const minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
   const seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
   const now = `${date.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`
-  const id = req.query.id || 'geral'
+  const idCampaign = req.query.id || 'geral' as string
   const ip = req.ip
   const email = req.query.email
   const userAgent = req.headers['user-agent']
   const referer = req.headers.referer
   const host = req.headers.host
   const acceptLanguage = req.headers['accept-language']
-  const data = `${now},${id},${email},${ip},"${userAgent}",${host},${referer},"${acceptLanguage}"\r`
+  const data = `${now},${idCampaign},${email},${ip},"${userAgent}",${host},${referer},"${acceptLanguage}"\r`
   console.log(data)
 
   try {
-    db.serialize(() => {
-      db.run(`INSERT INTO pixelTracker VALUES ('${id}', '${now}', '${id}', '${email}', '${ip}', '${userAgent}', '${host}', '${referer}', '${acceptLanguage}')`)
-    })
+    CreateRecord(idCampaign as string, now, email as string, ip, userAgent as string, host as string, referer as string, acceptLanguage as string)
     console.log('Register added')
   } catch (err) {
     console.log(err)
-    // fs.writeFile(path.join(__dirname, '../', 'reports', `${id}.csv`), data, { flag: 'a' }, (err) => console.log(err))
   }
   return send(res, 200, 'OK', { 'Content-Type': 'image/png' }, pixel)
 }
