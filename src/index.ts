@@ -1,10 +1,10 @@
-import dotenv from 'dotenv'
+require('dotenv').config()
+
 import http from 'http'
 import express from 'express'
 
 import routes from './routes/routes'
 
-dotenv.config()
 
 const port = process.env.PORT_APP || 8002
 const app = express()
