@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc --project ./",
     "dev": "ts-node-dev --respawn --inspect --transpile-only --ignore-watch node_modules src/index.ts",
-    "start": "nodemon dist/index"
+    "start": "node dist/index"
   },
   "author": "Wildiney Di Masi <wildiney@gmail.com>",
   "license": "ISC",
